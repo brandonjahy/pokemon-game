@@ -1,4 +1,5 @@
 
+// THIS IS THE DATABASE
 var pokemonDB = [
     {
       name: 'charmander',
@@ -29,64 +30,146 @@ var pokemonDB = [
     },
     
   ]
-
+// STATE
 var gameState = {
     userPokemon: '',
     rivalPokemon: ''
 }
 console.log(gameState)
+
+//ELEMENTS
 var pokemonEl = document.querySelector('.select-screen').querySelectorAll('.character')
 console.log(pokemonEl)
 var battleScreenEl = document.getElementById('battle-screen')
+var attackBtnsEl = document.getElementById('battle-screen').querySelectorAll('.attack')
+console.log(attackBtnsEl)
+
+
 var i = 0;
+
+//THIS IS INTIAL LOOP
 while (i < pokemonEl.length) {
+    //add function to all characters on screen select
     pokemonEl[i].onclick = function() {
+        //current selected pokemon name
         var pokemonName = this.dataset.pokemon
+        //elements for imgs on battle screen
         var player1Img = document.querySelector('.player1').getElementsByTagName('img')
         var player2Img = document.querySelector('.player2').getElementsByTagName('img')
-        
+        // we save current pokemon
         gameState.userPokemon = pokemonName
 
+        //cpu picks a pokemon
         cpuPick()
+
+        //change screen to battle screen
         battleScreenEl.classList.toggle('active')
 
+        //select data from current user pokemon
         var currentPokemon = pokemonDB.filter(function(pokemon){
             return pokemon.name == gameState.userPokemon
         })
+        player1Img[0].src = currentPokemon[0].img
 
+        //select data from current cpu pokemon
         var currentRivalPokemon = pokemonDB.filter(function(pokemon){
             return pokemon.name == gameState.rivalPokemon
         })
-
-        player1Img[0].src = currentPokemon[0].img
         player2Img[0].src = currentRivalPokemon[0].img
 
         console.log(currentPokemon)
+            //user chooses attack
+
+
+        //cpu health goes down
+
+
+        //cpu attack
+
+
+        //user health goes down
+
+
+        //rock > scissors
+
+        //papper > rock
+
+        //scissors > paper
+
+        //depending on pokemon type and defense is how hard is the attack is going to be and how much health it will take out
+
+        //then whoever get health to 0 loses
+
+
     } 
     i++
 }
 
-function randomNumber(min, max) {
+var a = 0
+while (a < attackBtnsEl.length) {
+    attackBtnsEl[a].onclick = function() {
+        var attackName = this.dataset.attack
+        gameState.currentUserAttack = attackName
+        
+        play(attackName, cpuAttack())
+        
+    }
+    a++
+}
+
+var cpuAttack = function() {
+    var attacks = ['rock', 'paper', 'scissors']
+
+    return attacks[randomNumber(0,3)]
+}
+
+var play = function(userAttack, cpuAttack){
+    switch(userAttack) {
+        case 'rock':
+            if(cpuAttack == 'paper'){
+                console.log('paper kills rock')
+            }
+            if(cpuAttack == 'scissors') {
+                console.log('rock kills paper')
+            }
+            if(cpuAttack == 'rock') {
+                console.log('its a draw')
+            }
+          console.log(userAttack)
+          break;
+        case 'paper':
+          console.log(userAttack)
+          break;
+        case 'scissors':
+          console.log(userAttack)
+          break;
+      }
+}
+
+var randomNumber = function randomNumber(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-function cpuPick() {
+var cpuPick = function cpuPick() {
     gameState.rivalPokemon = pokemonEl[randomNumber(0, 3)].dataset.pokemon
 }
 
+//user chooses attack
 
 
+//cpu health goes down
 
 
+//cpu attack
 
 
+//user health goes down
 
 
+//rock > scissors
 
+//papper > rock
 
-
-
-
-
+//scissors > paper
 
 
 
