@@ -1,4 +1,35 @@
 
+var pokemonDB = [
+    {
+      name: 'charmander',
+      type: 'fire',
+      hp: 39,
+      attack: 52,
+      defense: 43,
+      level: 1,
+      img: 'http://www.smogon.com/dex/media/sprites/xy/charmander.gif'
+    },
+    {
+      name: 'bulbasaur',
+      type: 'grass',
+      hp: 45,
+      attack: 49,
+      defense: 49,
+      level: 1,
+      img: 'http://www.smogon.com/dex/media/sprites/xy/bulbasaur.gif'
+    },
+    {
+      name: 'squirtle',
+      type: 'water',
+      hp: 44,
+      attack: 48,
+      defense: 65,
+      level: 1,
+      img: 'http://www.smogon.com/dex/media/sprites/xy/squirtle.gif'
+    },
+    
+  ]
+
 var gameState = {
     userPokemon: '',
     rivalPokemon: ''
@@ -11,11 +42,26 @@ var i = 0;
 while (i < pokemonEl.length) {
     pokemonEl[i].onclick = function() {
         var pokemonName = this.dataset.pokemon
+        var player1Img = document.querySelector('.player1').getElementsByTagName('img')
+        var player2Img = document.querySelector('.player2').getElementsByTagName('img')
+        
         gameState.userPokemon = pokemonName
 
         cpuPick()
         battleScreenEl.classList.toggle('active')
-        console.log(gameState)
+
+        var currentPokemon = pokemonDB.filter(function(pokemon){
+            return pokemon.name == gameState.userPokemon
+        })
+
+        var currentRivalPokemon = pokemonDB.filter(function(pokemon){
+            return pokemon.name == gameState.rivalPokemon
+        })
+
+        player1Img[0].src = currentPokemon[0].img
+        player2Img[0].src = currentRivalPokemon[0].img
+
+        console.log(currentPokemon)
     } 
     i++
 }
