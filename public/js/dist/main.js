@@ -73,8 +73,11 @@ var gameState = {
         player2Img[0].src = gameState.currentRivalPokemon[0].img
 
         //current user and cpu pokemon intial health
-        gameState.currentPokemon[0].health = gameState.calculateInitialHealth(gameState.currentPokemon)
-        gameState.currentRivalPokemon[0].health = gameState.calculateInitialHealth(gameState.currentRivalPokemon)
+        gameState.currentPokemon[0].health = gameState.calculateInitialHealth(gameState.currentPokemon);
+        gameState.currentPokemon[0].originalHealth = gameState.calculateInitialHealth(gameState.currentPokemon);
+
+        gameState.currentRivalPokemon[0].health = gameState.calculateInitialHealth(gameState.currentRivalPokemon);
+        gameState.currentRivalPokemon[0].originalHealth = gameState.calculateInitialHealth(gameState.currentRivalPokemon);
 
 
         console.log(gameState)
@@ -103,11 +106,23 @@ var gameState = {
         return ((0.20 * Math.sqrt(user[0].level)) * user[0].defense) * user[0].hp
     },
     attackMove:function (attack, level, stack, critical, enemy, attacker) {
-        console.log(enemy.name + ' health before: ' + enemy.health)
-        attackAmount: ((attack * level) * (stack * critical))
-        enemy.health = enemy.health - attackAmount
-        gameState.checkWinner(enemy, attacker)
-        console.log(enemy.name + ' health after: ' + enemy.health)
+        console.log(enemy.name + ' health before: ' + enemy.health);
+        attackAmount: ((attack * level) * (stack * critical));
+        enemy.health = enemy.health - attackAmount;
+
+        var userHP = document.querySelector('.player1').querySelector('.stats').querySelector('.health').querySelector('.health-bar').querySelector('.inside');
+
+        var cpuHP = document.querySelector('.player2').querySelector('.stats').querySelector('.health').querySelector('.health-bar').querySelector('.inside');
+
+        if(enemy.owner == 'user') {
+            var minusPercent = ((enemy.health * 100) / enemy.originalHealth)
+            userHP.style.width = ((minusPercent > 0) ? 0 : minusPercent) + '%'
+        } else {
+            var minusPercent = ((enemy.health * 100) / enemy.originalHealth)
+            cpuHP.style.width = ((minusPercent > 0) ? 0 : minusPercent) + '%'
+        }
+        gameState.checkWinner(enemy, attacker);
+        console.log(enemy.name + ' health after: ' + enemy.health);
     },
     checkWinner: function (enemy, attacker) {
         if (enemy.health <= 0) {
@@ -121,8 +136,10 @@ var gameState = {
         gameState.rivalPokemon = gameState.elements.pokemonEl[gameState.randomNumber(0, 3)].dataset.pokemon
     },
     play: function (userAttack, cpuAttack) {
-        currentPokemon: gameState.currentPokemon[0]
-        currentRivalPokemon: gameState.currentRivalPokemon[0]
+        var currentPokemon = gameState.currentPokemon[0];
+        var currentRivalPokemon = gameState.currentRivalPokemon[0];
+        currentPokemon.owner = 'user'
+        currentRivalPokemon.owner = 'cpu'
         switch (userAttack) {
             case 'rock':
                 if (cpuAttack == 'paper') {
